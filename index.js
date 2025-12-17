@@ -1,6 +1,12 @@
 const express = require("express");
+
+const morgan = require("morgan");
+const connectToDatabase = require("./database");
 const app = express();
 const port = 3000;
+app.use(morgan("dev"));
+
+connectToDatabase();
 app.use("/", (req, res) => {
   return res.status(200).send("ok");
 });
