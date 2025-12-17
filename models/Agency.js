@@ -11,5 +11,5 @@ const agencySchema = new Schema(
   },
   { timestamps: true }
 );
-const Agency = mongoose.model("Adviser", agencySchema);
+const Agency = mongoose.model("Agency", agencySchema);
 module.exports = Agency;

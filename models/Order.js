@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-
+const Trip = require("./Trip");
 const orderSchema = new Schema(
   {
-    trip: { type: mongoose.Types.ObjectId, ref: "Trip" },
+    trip: { type: mongoose.Types.ObjectId, ref: Trip },
     quantity: { type: Number },
     kids: { type: Number },
     adults: { type: Number },
