@@ -1,6 +1,8 @@
 const { StatusCodes, getStatusCode } = require("http-status-codes");
 const Trip = require("../models/Trip");
 const { categoryCodes, tags } = require("../helpers/data");
+const path = require("path");
+const fs = require("fs").promises;
 
 //endpoints pour front :
 const getAll = async (req, res) => {
@@ -140,6 +142,65 @@ const deleteAll = async (req, res) => {
       .send("Error while deleting the trips");
   }
 };
+const addImages = async (req, res) => {
+  const { id } = req.params;
+  const files = req.files;
+
+  if (!id)
+    return res.status(StatusCodes.BAD_REQUEST).send("No id provided. Failure");
+  if (!files || files.length === 0) {
+    return res.status(StatusCodes.BAD_REQUEST).send("No upload. Failure");
+  }
+
+  let trip;
+  try {
+    trip = await Trip.findById(id);
+    if (!trip)
+      return res.status(StatusCodes.NOT_FOUND).send("No trip found. Failure");
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send("Error while fetching trip. Failure");
+  }
+
+  try {
+    const directory = path.join(__dirname, "../public/images/trips", id);
+    await fs.mkdir(directory, { recursive: true });
+
+    await Promise.all(
+      files.map(async (file) => {
+        // Sécurité minimale: whitelist MIME (adapte selon besoin)
+        const allowed = new Set([
+          "image/png",
+          "image/jpeg",
+          "image/webp",
+          "image/avif",
+        ]);
+        if (!allowed.has(file.mimetype)) {
+          throw new Error(`Unsupported file type: ${file.mimetype}`);
+        }
+
+        // Évite les noms chelous (path traversal, etc.)
+        const safeName = path.basename(file.originalname).replace(/\s+/g, "_");
+
+        const uploadPath = path.join(directory, safeName);
+        await fs.writeFile(uploadPath, file.buffer);
+
+        if (!trip.images.includes(safeName)) trip.images.push(safeName);
+      })
+    );
+
+    await trip.save();
+    return res.status(StatusCodes.CREATED).send("File attached successfully");
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(`Server error: ${error.message}`);
+  }
+};
+
 module.exports = {
   create,
   getAll,
@@ -148,4 +209,5 @@ module.exports = {
   patchOne,
   deleteOne,
   deleteAll,
+  addImages,
 };

@@ -1,5 +1,7 @@
 const StatusCodes = require("http-status-codes");
 const Adviser = require("../models/Adviser");
+const path = require("path");
+const fs = require("fs").promises;
 
 //Endpoints pour le front
 const getAll = async (req, res) => {
@@ -48,4 +50,49 @@ const create = async (req, res) => {
       .send("Creation failed");
   }
 };
-module.exports = { create, getAll, getOne };
+
+const addImage = async (req, res) => {
+  const { id } = req.params;
+  const file = req.file;
+  if (!id) {
+    return res.status(StatusCodes.BAD_REQUEST).send("No id provided. Failure");
+  }
+  //fetch matching adviser
+  let adviser;
+  try {
+    adviser = await Adviser.findById(id);
+    if (!adviser) {
+      return res.status().send("No adviser found. Failure");
+    }
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send("Error while fetching adviser. Failure");
+  }
+  //Get out if something is wrong
+  if (!file || Object.keys(adviser).length === 0) {
+    return res.status(StatusCodes.BAD_REQUEST).send("No upload. Failure");
+  }
+  // Save
+  try {
+    const uploadPath = path.join(
+      __dirname,
+      "../public/images/advisers",
+      id,
+      file.originalname
+    );
+    const directory = path.dirname(uploadPath);
+    await fs.mkdir(directory, { recursive: true }, () => {});
+    await fs.writeFile(uploadPath, file.buffer, () => {});
+    adviser.image = file.originalname;
+    await adviser.save();
+    return res.status(StatusCodes.CREATED).send("File attached successfully");
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .send(`Server error: ${error} `);
+  }
+};
+module.exports = { create, getAll, getOne, addImage };

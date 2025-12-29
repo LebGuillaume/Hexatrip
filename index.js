@@ -2,22 +2,45 @@ const express = require("express");
 const morgan = require("morgan");
 const connectToDatabase = require("./database");
 const bodyParser = require("body-parser");
+const multer = require("multer");
+const dotenv = require("dotenv");
+//routes:
 const orderRoutes = require("./routes/order.routes");
 const adviserRoutes = require("./routes/adviser.routes");
 const agencyRoutes = require("./routes/agency.routes");
 const tripRoutes = require("./routes/trips.routes");
-
+const authRoutes = require("./routes/auth.routes");
+//instance
 const app = express();
 const port = 3000;
+//config
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(express.static("public"));
+dotenv.config();
 
+//connection to db:
 connectToDatabase();
+
+//config multer
+app.locals.uploader = multer({
+  storage: multer.memoryStorage({}),
+  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith("image")) {
+      cb(null, true);
+    } else {
+      cb(new Error("Only images are accepted"));
+    }
+  }, //Maw size : 10Mb
+});
+//endpoints
 app.use("/orders", orderRoutes);
 app.use("/advisers", adviserRoutes);
 app.use("/agencies", agencyRoutes);
 app.use("/trips", tripRoutes);
+app.use("/auth", authRoutes);
 app.use((req, res) => {
   return res.status(404).send("Page note found");
 });
