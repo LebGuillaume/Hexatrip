@@ -2,7 +2,8 @@ const { StatusCodes } = require("http-status-codes");
 const Order = require("../models/Order");
 const getAll = async (req, res) => {
   try {
-    const order = await Order.find({}).populate("trip");
+    const { email } = req.user;
+    const order = await Order.find({ email }).populate("trip");
     return res.status(StatusCodes.OK).send(order);
   } catch (error) {
     console.log(error);
