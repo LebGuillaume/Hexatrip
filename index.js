@@ -23,7 +23,9 @@ const checkoutRoutes = require("./routes/checkout.routes");
 const { StatusCodes } = require("http-status-codes");
 
 //instance
+
 const app = express();
+vapp.set("trust proxy", 1);
 const port = 5137;
 //config
 app.use(morgan("dev"));
@@ -60,6 +62,7 @@ const limitOptions = {
   },
   standardHeaders: true,
   legacyHeaders: false,
+  keyGenerator: (req) => req.ip,
 };
 app.use(expressRateLimit(limitOptions));
 //cors config
@@ -95,6 +98,7 @@ app.locals.uploader = multer({
   }, //Maw size : 10Mb
 });
 //endpoints
+app.get("/", (req, res) => res.status(200).send("OK"));
 app.use("/orders", orderRoutes);
 app.use("/advisors", advisorRoutes);
 app.use("/agencies", agencyRoutes);

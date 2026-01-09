@@ -24,6 +24,7 @@ const { StatusCodes } = require("http-status-codes");
 
 //instance
 const app = express();
+app.set("trust proxy", 1);
 const port = 5137;
 //config
 app.use(morgan("dev"));
@@ -35,7 +36,7 @@ app.use(helmet());
 app.use(express.json({ limit: "100kb" }));
 app.use(express.urlencoded({ extended: true, limit: "100kb" }));
 app.use(xssMiddleware);
-app.set("trust proxy", 1); // Allows vercel headers
+// Allows vercel headers
 app.use((req, res, next) => {
   Object.defineProperty(req, "query", {
     value: { ...req.query },
@@ -60,6 +61,7 @@ const limitOptions = {
   },
   standardHeaders: true,
   legacyHeaders: false,
+  keyGenerator: (req) => req.ip,
 };
 app.use(expressRateLimit(limitOptions));
 //cors config
@@ -95,6 +97,7 @@ app.locals.uploader = multer({
   }, //Maw size : 10Mb
 });
 //endpoints
+app.get("/", (req, res) => res.status(200).send("OK"));
 app.use("/orders", orderRoutes);
 app.use("/advisors", advisorRoutes);
 app.use("/agencies", agencyRoutes);
