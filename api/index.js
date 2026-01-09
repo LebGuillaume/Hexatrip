@@ -59,7 +59,7 @@ const limitOptions = {
       .json({ status: 429, error: "Too many requests" });
   },
   standardHeaders: true,
-  legacyheaders: false,
+  legacyHeaders: false,
 };
 app.use(expressRateLimit(limitOptions));
 //cors config
