@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-
-dotenv.config();
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 
 const mongoUriAtlas = `mongodb+srv://Guimaraiche:${process.env.DB_PWD}@cluster0.bmzuau6.mongodb.net/?retryWrites=true&w=majority&appName=hexa-trip`;
 const mongoUriLocalhost =

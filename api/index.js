@@ -3,7 +3,10 @@ const morgan = require("morgan");
 const connectToDatabase = require("../database");
 const bodyParser = require("body-parser");
 const multer = require("multer");
-const dotenv = require("dotenv");
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+
 const cors = require("cors");
 const helmet = require("helmet");
 const expressRateLimit = require("express-rate-limit");
@@ -27,7 +30,7 @@ app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static("public"));
-dotenv.config();
+
 app.use(helmet());
 app.use(express.json({ limit: "100kb" }));
 app.use(express.urlencoded({ extended: true, limit: "100kb" }));
