@@ -25,7 +25,7 @@ const getOne = async (req, res) => {
     const { id } = req.params;
     const adviser = await Adviser.findById(id);
     if (!adviser) {
-      return res.status(StatusCodes.BAD_REQUEST);
+      return res.status(StatusCodes.BAD_REQUEST).send("adviser not found");
     }
     return res.status(StatusCodes.OK).send(adviser);
   } catch (error) {

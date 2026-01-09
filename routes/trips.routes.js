@@ -10,7 +10,7 @@ const {
 } = require("../middlewares/authorizationMiddleware");
 //front
 router.get("/", tripController.getAll);
-router.get("/bestseller", tripController.getAllBestsellers);
+router.get("/bestsellers", tripController.getAllBestsellers);
 //postman
 
 router.post("/", tripController.create);

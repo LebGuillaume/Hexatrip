@@ -9,10 +9,10 @@ const getAll = async (req, res) => {
   const params = req.query;
   let formattedParams = {};
   if (params.region && params.region !== "0") {
-    formattedParams.duration = parseInt(params.duration);
+    formattedParams.region = parseInt(params.region);
   }
   if (params.duration && params.duration !== "0") {
-    formattedParams.region = parseInt(params.region);
+    formattedParams.duration = parseInt(params.duration);
   }
   if (params.town) {
     formattedParams.town = { $regex: params.town, $options: "i" };
@@ -29,8 +29,8 @@ const getAll = async (req, res) => {
     }
   }
   if (params.tags && params.tags !== "0") {
-    const tags = tags.find((tag) => tag.code === parseInt(params.tags));
-    if (category) {
+    const tag = tags.find((tag) => tag.code === parseInt(params.tags));
+    if (tag) {
       formattedParams.tags = tag.name;
     }
   }
