@@ -26,7 +26,7 @@ const { StatusCodes } = require("http-status-codes");
 
 const app = express();
 app.set("trust proxy", 1);
-const port = 5137;
+
 //config
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -110,7 +110,6 @@ app.use("/create-checkout-session", checkoutRoutes);
 app.use((req, res) => {
   return res.status(404).send("Page note found");
 });
-app.listen(port, () => {
-  console.log(`Hexatrip server running on port: ${port}`);
-});
+
 console.log("RUNNING FILE =", __filename);
+module.exports = app;

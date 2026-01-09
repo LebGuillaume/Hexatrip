@@ -25,7 +25,7 @@ const { StatusCodes } = require("http-status-codes");
 //instance
 const app = express();
 app.set("trust proxy", 1);
-const port = 5137;
+
 //config
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -67,7 +67,7 @@ app.use(expressRateLimit(limitOptions));
 //cors config
 const allowedOrigins = [
   "http://localhost:5173", // Vite (front)
-  "https://hexatrip-front-gui.netlify.app/", // Prod (si défini)
+  "https://hexatrip-front-gui.netlify.app", // Prod (si défini)
 ].filter(Boolean);
 
 app.use(
@@ -108,7 +108,6 @@ app.use("/create-checkout-session", checkoutRoutes);
 app.use((req, res) => {
   return res.status(404).send("Page note found");
 });
-app.listen(port, () => {
-  console.log(`Hexatrip server running on port: ${port}`);
-});
+
 console.log("RUNNING FILE =", __filename);
+module.exports = app;
