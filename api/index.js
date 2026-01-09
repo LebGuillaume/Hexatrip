@@ -35,7 +35,7 @@ app.use(helmet());
 app.use(express.json({ limit: "100kb" }));
 app.use(express.urlencoded({ extended: true, limit: "100kb" }));
 app.use(xssMiddleware);
-app.set("trust proxy, 1"); // Allows vercel headers
+app.set("trust proxy", 1); // Allows vercel headers
 app.use((req, res, next) => {
   Object.defineProperty(req, "query", {
     value: { ...req.query },
