@@ -68,7 +68,7 @@ app.use(expressRateLimit(limitOptions));
 //cors config
 const allowedOrigins = [
   "http://localhost:5173", // Vite (front)
-  process.env.CLIENT_URL_PRODUCTION, // Prod (si défini)
+  "https://hexatrip-front-gui.netlify.app/", // Prod (si défini)
 ].filter(Boolean);
 
 app.use(
