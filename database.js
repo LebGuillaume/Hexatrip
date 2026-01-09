@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-const mongoUriAtlas = `mongodb+srv://Guimaraiche:${DB_PWD}@cluster0.bmzuau6.mongodb.net/?retryWrites=true&w=majority&appName=hexa-trip`;
+const mongoUriAtlas = `mongodb+srv://Guimaraiche:${process.env.DB_PWD}@cluster0.bmzuau6.mongodb.net/?retryWrites=true&w=majority&appName=hexa-trip`;
 const mongoUriLocalhost =
   process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/hexa-trip";
 
