@@ -61,14 +61,13 @@ const limitOptions = {
   },
   standardHeaders: true,
   legacyHeaders: false,
-  keyGenerator: (req) => req.ip,
 };
 app.use(expressRateLimit(limitOptions));
 //cors config
 const allowedOrigins = [
   "http://localhost:5173", // Vite (front)
   "https://hexatrip-front-gui.netlify.app", // Prod (si défini)
-].filter(Boolean);
+];
 
 app.use(
   cors({

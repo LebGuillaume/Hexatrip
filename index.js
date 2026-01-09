@@ -62,7 +62,6 @@ const limitOptions = {
   },
   standardHeaders: true,
   legacyHeaders: false,
-  keyGenerator: (req) => req.ip,
 };
 app.use(expressRateLimit(limitOptions));
 //cors config
