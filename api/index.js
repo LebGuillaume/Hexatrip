@@ -77,7 +77,7 @@ app.use(
     },
     credentials: true,
     methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Forwarded-For"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 connectToDatabase();
