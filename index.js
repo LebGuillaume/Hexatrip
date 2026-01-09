@@ -67,7 +67,8 @@ const limitOptions = {
 app.use(expressRateLimit(limitOptions));
 //cors config
 const allowedOrigins = [
-  "http://localhost:5173", // Vite (front)
+  "http://localhost:5173",
+  "https://hexatrip-front-gui.netlify.app",
   "https://hexatrip-front-gui.netlify.app/", // Prod (si défini)
 ].filter(Boolean);
 
