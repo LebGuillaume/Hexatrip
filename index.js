@@ -25,7 +25,7 @@ const { StatusCodes } = require("http-status-codes");
 //instance
 
 const app = express();
-vapp.set("trust proxy", 1);
+app.set("trust proxy", 1);
 const port = 5137;
 //config
 app.use(morgan("dev"));
@@ -80,7 +80,7 @@ app.use(
     },
     credentials: true,
     methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Forwarded-For"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 connectToDatabase();
